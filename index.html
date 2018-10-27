@@ -1,103 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+    <style>
 
+        body {
+          font: 12px sans-serif;
+        }
+        
+        path {
+          stroke-width: 0.5px;
+          stroke: #000000;
+          fill: #49b2ad;
+          cursor: pointer;
+        }
+        
+        path:hover, path.highlighted {
+          fill: #daf5d2;
+        }
+        
+        </style>
 <head>
     <meta charset="UTF-8">
     <title>Information by zip code</title>
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
-
     
+
+    <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+
+    <style>
+            #response {
+                display: inline-block;
+                margin: none;
+            }
+        
+            .stuff {
+                display: inline-block;
+            }
+        
+            form {
+                text-align: left;
+            }
+        
+            body {
+                font: 12px sans-serif;
+            }
+        
+            path {
+                stroke-width: 0.5px;
+                stroke: #000000;
+                fill: #49b2ad;
+                cursor: pointer;
+            }
+        
+            path:hover,
+            path.highlighted {
+                fill: #daf5d2;
+            }
+        </style>
 
 
 </head>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <!-- <div class="navbar-header">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <!-- <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> -->
-        <!-- <span class="sr-only">Toggle navigation</span>
+          <!-- <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> -->
         <!-- </button> -->
         <a class="navbar-brand" href="#">US ZIP CODE NON-US CITIZEN ESTIMATOR</a>
-    </div>
+      </div>
+  
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
 
-
-
-
-</nav>
-
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 <body>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+            <script>
 
-        //Map dimensions (in pixels)
-        var width = 900,
-            height = 400;
-
-        //Map projection
-        var projection = d3.geo.albersUsa()
-            .scale(834.3203652551769)
-            .translate([width / 2, height / 2]) //translate to center the map in view
-
-        //Generate paths based on projection
-        var path = d3.geo.path()
-            .projection(projection);
-
-        //Create an SVG
-        var svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        //Group for the map features
-        var features = svg.append("g")
-            .attr("class", "features");
-
-        //Create zoom/pan listener
-        //Change [1,Infinity] to adjust the min/max zoom scale
-        var zoom = d3.behavior.zoom()
-            .scaleExtent([1, Infinity])
-            .on("zoom", zoomed);
-
-        svg.call(zoom);
-
-        d3.json("nationbyCounty.geojson", function (error, geodata) {
-            if (error) return console.log(error); //unknown error, check the console
-
-            //Create a path for each map feature in the data
-            features.selectAll("path")
-                .data(geodata.features)
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .on("click", clicked);
-
-        });
-
-        // Add optional onClick events for features here
-        // d.properties contains the attributes (e.g. d.properties.name, d.properties.population)
-        function clicked(d, i) {
-
-        }
-
-
-        //Update map on zoom/pan
-        function zoomed() {
-            features.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")")
-                .selectAll("path").style("stroke-width", 0.5 / zoom.scale() + "px");
-        }
-
-    </script>
-    <br />
-    <div class="container">
-
-
-
+                    //Map dimensions (in pixels)
+                    var width = 900,
+                        height = 400;
+                    
+                    //Map projection
+                    var projection = d3.geo.albersUsa()
+                        .scale(834.3203652551769)
+                        .translate([width/2,height/2]) //translate to center the map in view
+                    
+                    //Generate paths based on projection
+                    var path = d3.geo.path()
+                        .projection(projection);
+                    
+                    //Create an SVG
+                    var svg = d3.select("body").append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+                    
+                    //Group for the map features
+                    var features = svg.append("g")
+                        .attr("class","features");
+                    
+                    //Create zoom/pan listener
+                    //Change [1,Infinity] to adjust the min/max zoom scale
+                    var zoom = d3.behavior.zoom()
+                        .scaleExtent([1, Infinity])
+                        .on("zoom",zoomed);
+                    
+                    svg.call(zoom);
+                    
+                    d3.json("nationbyCounty.geojson",function(error,geodata) {
+                      if (error) return console.log(error); //unknown error, check the console
+                    
+                      //Create a path for each map feature in the data
+                      features.selectAll("path")
+                        .data(geodata.features)
+                        .enter()
+                        .append("path")
+                        .attr("d",path)
+                        .on("click",clicked);
+                    
+                    });
+                    
+                    // Add optional onClick events for features here
+                    // d.properties contains the attributes (e.g. d.properties.name, d.properties.population)
+                    function clicked(d,i) {
+                    
+                    }
+                    
+                    
+                    //Update map on zoom/pan
+                    function zoomed() {
+                      features.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")")
+                          .selectAll("path").style("stroke-width", 0.5 / zoom.scale() + "px" );
+                    }
+                    
+                    </script>
+  <div class="container"></div>
         <div class="row">
             <div class="col-sm-12">
                 <h4>1. Enter any zip code in 'Add Here' field<br>
@@ -108,59 +150,28 @@
 
                 </div>
                 <br>
-
-                <div id="response"></div>
+                
+                <div id = "response"></div>
                 <div class="row">
-                    <form id="addButton">
-                        <label for="timeinput">Add Zip here: </label>
-                        <input type="text" id="timelapse-input">
-                        <br>
-                        <input id="add" type="submit" value="Submit">
-                    </form>
+                <form id="addButton">
+                    <label for="timeinput">Add Zip here: </label>
+                    <input type="text" id="timelapse-input">
+                    <br>
+                    <input id="add" type="submit" value="Submit">
+                </form>
                 </div><br>
 
+                </div>
+                <footer>Notes: This information is from US Census Data (2016 ACS 5-year Estimates) via API call. <br> Created by <a href=  "https://patrick-willmore.github.io/Portfolio/">Patrick Willmore </a> (in his spare time) for non-profit organizations helping humans born abroad. </footer>
+
+
+
             </div>
-            <footer>Notes: This information is from US Census Data (2016 ACS 5-year Estimates) via API call. <br>
-                Created by <a href="https://patrick-willmore.github.io/Portfolio/">Patrick Willmore </a> (in his spare
-                time) for non-profit organizations helping humans born abroad. </footer>
-
-
-
         </div>
-    </div>
+ 
 
 
 
-    <style>
-        #response {
-            display: inline-block;
-            margin: none;
-        }
-
-        .stuff {
-            display: inline-block;
-        }
-
-        form {
-            text-align: left;
-        }
-
-        body {
-            font: 12px sans-serif;
-        }
-
-        path {
-            stroke-width: 0.5px;
-            stroke: #000000;
-            fill: #49b2ad;
-            cursor: pointer;
-        }
-
-        path:hover,
-        path.highlighted {
-            fill: #daf5d2;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery.js"></script>
 
 
